@@ -2,7 +2,9 @@
 import 'package:chats/services/firbase_auth.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/views/signup.dart';
+import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
+import 'package:chats/widgets/tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.deepOrange, Colors.white],
             begin: Alignment.topCenter,
@@ -39,9 +41,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 80),
-            Padding(
-              padding: const EdgeInsets.all(20),
+            const SizedBox(height: 80),
+            const Padding(
+              padding: EdgeInsets.all(20),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(60),
@@ -76,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       TextForm(
                         hinttext: 'Username',
                         obscureText: true,
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         controller: passwordController,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
                         child: Row(
@@ -97,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                               onTap: () {
                                 // Handle forgot password
                               },
-                              child: Text(
+                              child: const Text(
                                 "Forgot Password?",
                                 style: TextStyle(
                                   color: Colors.blue,
@@ -108,48 +110,29 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
-                      GestureDetector(
+                      const SizedBox(height: 10),
+                      
+                      
+                      Button(
                         onTap: () {
-                          signInUser();
-                           Navigator.push(
+
+                          signInUser(); 
+                          Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Home()),
                           );
                         },
-                        child: Container(
-                          padding: EdgeInsets.all(25),
-                          margin: EdgeInsets.symmetric(horizontal: 25),
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
-                            child: Text(
-                              "sign",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ),
                       ),
-                      // Button(
-                      //   onTap: () {
-
-                      //     signInUser(); // Navigator.push(
-                      //     //   context,
-                      //     //   MaterialPageRoute(builder: (context) => Home()),
-                      //     // );
-                      //   },
-                      // ),
-                      SizedBox(height: 10),
-                      Row(
+                      const SizedBox(height: 10),
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          //SqureTile(imagePath: "assets/facebook-messenger.png"),
+                          SqureTile(imagePath: "assets/facebook-messenger.png"),
                           SizedBox(width: 10),
-                        //  SqureTile(imagePath: "assets/facebook-messenger.png"),
+                         SqureTile(imagePath: "assets/facebook-messenger.png"),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -158,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         },
                         child: Container(
-                          child: Text(
+                          child: const Text(
                             "Sign Up",
                             style: TextStyle(color: Colors.blue),
                           ),
