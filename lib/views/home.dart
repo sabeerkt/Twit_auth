@@ -11,30 +11,28 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-final textcontroller = TextEditingController();
-
-void Postmsg() {
-  if (textcontroller.text.isNotEmpty) {
-    FirebaseFirestore.instance.collection("user post").add({
-      "message": textcontroller.text,
-      "timestamp": Timestamp.now(),
-    });
-  }
-}
-
 class _HomeState extends State<Home> {
+  final textcontroller = TextEditingController();
+
+  void Postmsg() {
+    if (textcontroller.text.isNotEmpty) {
+      FirebaseFirestore.instance.collection("user post").add({
+        "UserEmail": currentUser.email,
+        "message": textcontroller.text,
+        "timestamp": Timestamp.now(),
+      });
+
+      // Clear the text field after posting the message
+      textcontroller.clear();
+    }
+  }
+
   late User currentUser;
 
   @override
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser!;
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    textcontroller.clear();
   }
 
   void signOut() {
@@ -44,28 +42,57 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      //backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text("Home"),
+        title: const Text("Home"),
         actions: [
           IconButton(
             onPressed: () {
-              signOut(); // Fix: Added parentheses to call the signOut function
+              signOut();
             },
-            icon: Icon(Icons.abc),
+            icon: Image.asset(
+              'assets/log-out.png', 
+              width: 24, 
+              height: 24, 
+            ),
           )
         ],
       ),
       body: Column(
         children: [
-          Padding(
+          Container(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Logged in as: ${currentUser.email}",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+            decoration: BoxDecoration(
+              color: Colors.blue, // Add your desired background color
+              borderRadius:
+                  BorderRadius.circular(10), // Optional: Add rounded corners
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.account_circle, // Add an icon for a user profile
+                  size: 32,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                    width: 10), // Add some spacing between icon and text
+                Text(
+                  "Logged in as: ${currentUser.email}",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Set text color to white
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -82,7 +109,7 @@ class _HomeState extends State<Home> {
                       final post = snapshot.data!.docs[index];
                       return Post(
                         msg: post["message"],
-                        userEmail: "user",
+                        userEmail: post["UserEmail"],
                       );
                     },
                   );
@@ -91,7 +118,7 @@ class _HomeState extends State<Home> {
                     child: Text("Error: ${snapshot.error.toString()}"),
                   );
                 }
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               },
@@ -112,7 +139,7 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     Postmsg();
                   },
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                 ),
               ],
             ),

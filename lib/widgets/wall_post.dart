@@ -9,9 +9,13 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Generate a random color for each post
+    final randomColor = Colors.primaries[
+        DateTime.now().microsecondsSinceEpoch % Colors.primaries.length];
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueAccent, // Use your preferred background color
+        color: randomColor, // Use the generated random color
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -27,13 +31,23 @@ class Post extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            msg,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white, // Text color
-            ),
+          Row(
+            children: [
+              Icon(
+                Icons.person,
+                size: 24,
+                color: Colors.white, // Icon color
+              ),
+              SizedBox(width: 8),
+              Text(
+                msg,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Text color
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 8),
           Text(

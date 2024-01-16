@@ -140,9 +140,11 @@ class _LoginPageState extends State<LoginPage> {
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SqureTile(imagePath: "assets/facebook-messenger.png"),
+                          SqureTile(imagePath: "assets/google.png"),
                           SizedBox(width: 10),
-                          SqureTile(imagePath: "assets/facebook-messenger.png"),
+                          SqureTile(imagePath: "assets/github.png"),
+                          SizedBox(width: 10),
+                          SqureTile(imagePath: "assets/otp.png"),
                         ],
                       ),
                       const SizedBox(height: 10),
