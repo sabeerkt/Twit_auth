@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                     width: 10), // Add some spacing between icon and text
                 Text(
-                  "Logged in as: ${currentUser.email}",
+                  "Logged In as: ${currentUser.email}",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

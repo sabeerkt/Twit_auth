@@ -1,4 +1,3 @@
-import 'package:chats/services/firbase_auth.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
@@ -16,36 +15,36 @@ class _SignUpState extends State<SignUp> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final Confpasswordcontroller = TextEditingController();
-  void signUp() async {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    },
-  );
-  if (passwordController.text != Confpasswordcontroller.text) {
-    Navigator.pop(context);
-    displaydlg("Passwords do not match");
-    return;
-  }
-  try {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: usernameController.text, password: passwordController.text)
-        .then((userCredential) {
-          Navigator.pop(context); // Dismiss the loading dialog
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-          );
-        });
-  } on FirebaseAuthException catch (e) {
-    Navigator.pop(context);
-    displaydlg(e.code);
-  }
-}
 
+  void signUp() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    if (passwordController.text != Confpasswordcontroller.text) {
+      Navigator.pop(context);
+      displaydlg("Passwords do not match");
+      return;
+    }
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: usernameController.text, password: passwordController.text)
+          .then((userCredential) {
+            Navigator.pop(context); // Dismiss the loading dialog
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          });
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      displaydlg(e.code);
+    }
+  }
 
   void displaydlg(String message) {
     showDialog(
@@ -57,13 +56,6 @@ class _SignUpState extends State<SignUp> {
       },
     );
   }
-
-  // void signInUser() {
-  //   FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
-  //       email: usernameController.text,
-  //       password: passwordController.text,
-  //       context: context);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,11 +137,6 @@ class _SignUpState extends State<SignUp> {
                       Button(
                         onTap: () {
                           signUp();
-                          // signInUser();
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => Home()),
-                          // );
                         },
                       ),
                     ],

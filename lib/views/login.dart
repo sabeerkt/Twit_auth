@@ -1,5 +1,8 @@
+import 'package:chats/auth/github.dart';
+import 'package:chats/auth/google_sign.dart';
 import 'package:chats/views/signup.dart';
 import 'package:chats/widgets/button.dart';
+import 'package:chats/widgets/otp.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void SignIn() async {
+  void signIn() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -25,17 +28,22 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: usernameController.text, password: passwordController.text);
-      if (context.mounted) Navigator.pop(context);
+        email: usernameController.text,
+        password: passwordController.text,
+      );
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      displaydlg(e.code);
+      displayDialog(e.message ?? "Login failed");
+    } finally {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context); // Dismiss the dialog regardless of the outcome
+      }
     }
   }
 
-  void displaydlg(String message) {
+  void displayDialog(String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -75,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "login In",
+                      "Login In",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -132,19 +140,33 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 10),
                       Button(
-                        onTap: () {
-                          SignIn(); // Fix: Added parentheses to call the SignIn function
-                        },
+                        onTap: signIn,
                       ),
                       const SizedBox(height: 10),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SqureTile(imagePath: "assets/google.png"),
+                          GestureDetector(
+                            onTap: () {
+                              AuthServices().signInWithGoogle();
+                            },
+                            child: SqureTile(imagePath: "assets/google.png"),
+                          ),
                           SizedBox(width: 10),
-                          SqureTile(imagePath: "assets/github.png"),
+                          GestureDetector(
+                            onTap: () {
+                              AuthServicesGithub().signInWithGithub();
+                            },
+                            child: SqureTile(imagePath: "assets/github.png"),
+                          ),
                           SizedBox(width: 10),
-                          SqureTile(imagePath: "assets/otp.png"),
+                          GestureDetector(
+                            onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PhoneSignIn()));
+                      },
+                            
+                            child: SqureTile(imagePath: "assets/otp.png")),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -153,9 +175,10 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignUp(
-                                      onTap: () {},
-                                    )),
+                              builder: (context) => SignUp(
+                                onTap: () {},
+                              ),
+                            ),
                           );
                         },
                         child: Container(
