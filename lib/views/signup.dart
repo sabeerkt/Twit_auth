@@ -1,13 +1,13 @@
-
+import 'package:chats/services/firbase_auth.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class SignUp extends StatefulWidget {
-  final usernamecontroller = TextEditingController();
-  final passwordcontroller = TextEditingController();
+  // final usernamecontroller = TextEditingController();
+  // final passwordcontroller = TextEditingController();
 
   SignUp({Key? key});
 
@@ -16,6 +16,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void signInUser() {
+    FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+        email: usernameController.text,
+        password: passwordController.text,
+        context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,23 +88,24 @@ class _SignUpState extends State<SignUp> {
                       TextForm(
                         hinttext: 'Username',
                         obscureText: true,
-                        controller: widget.usernamecontroller,
+                        controller: usernameController,
                       ),
                       TextForm(
                         hinttext: 'Password',
                         obscureText: true,
-                        controller: widget.passwordcontroller,
+                        controller: passwordController,
                       ),
-                      TextForm(
-                        hinttext: 'Confirm Password',
-                        obscureText: true,
-                        controller: widget.passwordcontroller,
-                      ),
+                      // TextForm(
+                      //   hinttext: 'Confirm Password',
+                      //   obscureText: true,
+                      //   controller: widget.passwordcontroller,
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
                       Button(
                         onTap: () {
+                          signInUser();
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Home()),

@@ -19,11 +19,21 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signInUser() {
-    FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+  // void signInUser() {
+  //   FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+  //       email: usernameController.text,
+  //       password: passwordController.text,
+  //       context: context);
+  // }
+  loginUser() {
+    FirebaseAuthMethods(FirebaseAuth.instance).loginWithEmail(
         email: usernameController.text,
         password: passwordController.text,
         context: context);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => Home()));
+    usernameController.text = "";
+    passwordController.text = "";
   }
 
   @override
@@ -55,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Sign In",
+                      "login In",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -115,12 +125,12 @@ class _LoginPageState extends State<LoginPage> {
                       
                       Button(
                         onTap: () {
-
-                          signInUser(); 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
+ loginUser();
+                       //   signInUser(); 
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => Home()),
+                          // );
                         },
                       ),
                       const SizedBox(height: 10),
