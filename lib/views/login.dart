@@ -1,6 +1,3 @@
-
-import 'package:chats/services/firbase_auth.dart';
-import 'package:chats/views/home.dart';
 import 'package:chats/views/signup.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
@@ -9,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key, required void Function() onTap}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -19,21 +16,34 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // void signInUser() {
-  //   FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
-  //       email: usernameController.text,
-  //       password: passwordController.text,
-  //       context: context);
-  // }
-  loginUser() {
-    FirebaseAuthMethods(FirebaseAuth.instance).loginWithEmail(
-        email: usernameController.text,
-        password: passwordController.text,
-        context: context);
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Home()));
-    usernameController.text = "";
-    passwordController.text = "";
+  void SignIn() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: usernameController.text, password: passwordController.text);
+      if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      displaydlg(e.code);
+    }
+  }
+
+  void displaydlg(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(message),
+        );
+      },
+    );
   }
 
   @override
@@ -121,16 +131,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      
-                      
                       Button(
                         onTap: () {
- loginUser();
-                       //   signInUser(); 
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => Home()),
-                          // );
+                          SignIn(); // Fix: Added parentheses to call the SignIn function
                         },
                       ),
                       const SizedBox(height: 10),
@@ -139,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           SqureTile(imagePath: "assets/facebook-messenger.png"),
                           SizedBox(width: 10),
-                         SqureTile(imagePath: "assets/facebook-messenger.png"),
+                          SqureTile(imagePath: "assets/facebook-messenger.png"),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -147,7 +150,10 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SignUp()),
+                            MaterialPageRoute(
+                                builder: (context) => SignUp(
+                                      onTap: () {},
+                                    )),
                           );
                         },
                         child: Container(

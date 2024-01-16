@@ -1,3 +1,5 @@
+import 'package:chats/auth/auth.dart';
+import 'package:chats/auth/login_reg.dart';
 import 'package:chats/firebase_options.dart';
 import 'package:chats/views/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: AuthPage(),
     );
   }
 }

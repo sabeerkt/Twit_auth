@@ -37,12 +37,24 @@ class _HomeState extends State<Home> {
     textcontroller.clear();
   }
 
+  void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
         title: Text("Home"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              signOut(); // Fix: Added parentheses to call the signOut function
+            },
+            icon: Icon(Icons.abc),
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -57,8 +69,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-            child:
-             StreamBuilder(
+            child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection("user post")
                   .orderBy("timestamp", descending: false)

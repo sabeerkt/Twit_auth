@@ -6,10 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
-  // final usernamecontroller = TextEditingController();
-  // final passwordcontroller = TextEditingController();
-
-  SignUp({Key? key});
+  SignUp({Key? key, required void Function() onTap});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -18,20 +15,62 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-
-  void signInUser() {
-    FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
-        email: usernameController.text,
-        password: passwordController.text,
-        context: context);
+  final Confpasswordcontroller = TextEditingController();
+  void signUp() async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    },
+  );
+  if (passwordController.text != Confpasswordcontroller.text) {
+    Navigator.pop(context);
+    displaydlg("Passwords do not match");
+    return;
   }
+  try {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: usernameController.text, password: passwordController.text)
+        .then((userCredential) {
+          Navigator.pop(context); // Dismiss the loading dialog
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        });
+  } on FirebaseAuthException catch (e) {
+    Navigator.pop(context);
+    displaydlg(e.code);
+  }
+}
+
+
+  void displaydlg(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(message),
+        );
+      },
+    );
+  }
+
+  // void signInUser() {
+  //   FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
+  //       email: usernameController.text,
+  //       password: passwordController.text,
+  //       context: context);
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.deepOrange, Colors.white],
             begin: Alignment.topCenter,
@@ -40,11 +79,11 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 80,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
+            const Padding(
+              padding: EdgeInsets.all(20),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,12 +105,12 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(60),
@@ -82,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       TextForm(
@@ -95,21 +134,22 @@ class _SignUpState extends State<SignUp> {
                         obscureText: true,
                         controller: passwordController,
                       ),
-                      // TextForm(
-                      //   hinttext: 'Confirm Password',
-                      //   obscureText: true,
-                      //   controller: widget.passwordcontroller,
-                      // ),
-                      SizedBox(
+                      TextForm(
+                        hinttext: 'Confirm Password',
+                        obscureText: true,
+                        controller: Confpasswordcontroller,
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       Button(
                         onTap: () {
-                          signInUser();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
+                          signUp();
+                          // signInUser();
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => Home()),
+                          // );
                         },
                       ),
                     ],
