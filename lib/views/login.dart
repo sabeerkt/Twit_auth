@@ -1,4 +1,6 @@
+import 'package:chats/services/git.dart';
 import 'package:chats/views/register.dart';
+import 'package:chats/widgets/otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -194,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                //  AuthServicesGithub().signInWithGithub();
+                                AuthServicesGithub().signInWithGithub();
                               },
                               child: const SqureTile(
                                   imagePath: "assets/github.png"),
@@ -202,8 +204,8 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => PhoneSignIn()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => PhoneSignIn()));
                               },
                               child:
                                   const SqureTile(imagePath: "assets/otp.png"),
