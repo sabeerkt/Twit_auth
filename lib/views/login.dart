@@ -6,6 +6,8 @@ import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/tile.dart';
 
+import '../services/auth.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key, required void Function() onTap}) : super(key: key);
 
@@ -16,7 +18,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // final GoogleSignIn _googleSignIn = GoogleSignIn();
+  Authservice authService = Authservice();
 
   void signIn() async {
     if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
@@ -45,29 +48,6 @@ class _LoginPageState extends State<LoginPage> {
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
-    }
-  }
-
-  Future<void> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        // User canceled the Google Sign In process
-        return;
-      }
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (error) {
-      print("Error signing in with Google: $error");
-      // Handle the error
     }
   }
 
@@ -201,8 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                signInWithGoogle();
+                              onTap: () async {
+                                await authService.signInWithGoogle();
+                                //signInWithGoogle();
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => PhoneSignIn()));
                               },
                               child: const SqureTile(
                                   imagePath: "assets/google.png"),
