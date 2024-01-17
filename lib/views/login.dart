@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 80),
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,8 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                           height: 100,
                           width: 100,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           "Login In",
                           style: TextStyle(
                             fontSize: 20,
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PhoneSignIn()));
+                                    builder: (context) => const PhoneSignIn()));
                               },
                               child:
                                   const SqureTile(imagePath: "assets/otp.png"),

@@ -31,7 +31,7 @@ class FirebaseAuthMethods {
           showOTPDialog(
               codeController: codeController,
               context: context,
-              onpressed: () async {
+              onPressed: () async {
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(
                     verificationId: verificationId,
                     smsCode: codeController.text.trim());
