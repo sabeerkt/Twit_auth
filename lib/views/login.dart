@@ -1,13 +1,10 @@
-import 'package:chats/auth/github.dart';
-import 'package:chats/auth/google_sign.dart';
 import 'package:chats/views/signup.dart';
-import 'package:chats/widgets/button.dart';
-import 'package:chats/widgets/otp.dart';
-import 'package:chats/widgets/textform.dart';
-import 'package:chats/widgets/tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:chats/widgets/textform.dart';
+import 'package:chats/widgets/button.dart';
+import 'package:chats/widgets/tile.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key, required void Function() onTap}) : super(key: key);
@@ -19,8 +16,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   void signIn() async {
+    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+      // Alert user to fill in both fields
+      displayDialog("Please fill in both Username and Password fields.");
+      return;
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -44,28 +48,64 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User canceled the Google Sign In process
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (error) {
+      print("Error signing in with Google: $error");
+      // Handle the error
+    }
+  }
+
   void displayDialog(String message) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(message),
+          title: Text(
+            message,
+            style: const TextStyle(
+              // Customize the text style if needed
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+          actions: <Widget>[
+            // Add additional actions or buttons if needed
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Perform any additional actions on button press
+              },
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  // Customize the button text style if needed
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
-  }
-
-  signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
