@@ -1,10 +1,11 @@
-import 'package:chats/views/signup.dart';
+import 'package:chats/views/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/tile.dart';
+import 'package:lottie/lottie.dart';
 
 import '../services/auth.dart';
 
@@ -105,16 +106,16 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 80),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(20),
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.create,
-                          size: 100,
-                          color: Colors.white,
+                        Lottie.asset(
+                          'assets/login.json', // Replace with the path to your Lottie animation file
+                          height: 100,
+                          width: 100,
                         ),
                         SizedBox(height: 10),
                         Text(

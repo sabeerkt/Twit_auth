@@ -40,7 +40,7 @@ class Post extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                msg,
+                userEmail,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ class Post extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            userEmail,
+            msg,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[200], // Text color

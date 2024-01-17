@@ -51,9 +51,9 @@ class _HomeState extends State<Home> {
               signOut();
             },
             icon: Image.asset(
-              'assets/log-out.png', 
-              width: 24, 
-              height: 24, 
+              'assets/log-out.png',
+              width: 24,
+              height: 24,
             ),
           )
         ],
@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                     width: 10), // Add some spacing between icon and text
                 Text(
-                  "Logged In as: ${currentUser.email}",
+                  "Logged : ${currentUser.email}",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

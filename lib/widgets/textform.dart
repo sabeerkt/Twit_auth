@@ -28,7 +28,7 @@ class TextForm extends StatelessWidget {
         controller: controller,
         //obscureText: obscureText,
         decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
           ),
           fillColor: const Color.fromARGB(255, 230, 219, 219),

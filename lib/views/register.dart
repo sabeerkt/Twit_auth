@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
-  SignUp({Key? key, required void Function() onTap});
+  SignUp({Key? key, required void Function() onTap}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -31,15 +31,16 @@ class _SignUpState extends State<SignUp> {
       return;
     }
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: usernameController.text, password: passwordController.text)
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: usernameController.text, password: passwordController.text)
           .then((userCredential) {
-            Navigator.pop(context); // Dismiss the loading dialog
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
-          });
+        Navigator.pop(context); // Dismiss the loading dialog
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      });
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       displaydlg(e.code);
@@ -68,40 +69,41 @@ class _SignUpState extends State<SignUp> {
             begin: Alignment.topCenter,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 80,
-            ),
-            const Padding(
-              padding: EdgeInsets.all(20),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.create,
-                      size: 100,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 20,
+        child: SingleChildScrollView(
+          // Wrap your Column with SingleChildScrollView
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 80,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.create,
+                        size: 100,
                         color: Colors.white,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Expanded(
-              child: Container(
+              const SizedBox(
+                height: 40,
+              ),
+              Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -143,8 +145,8 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
