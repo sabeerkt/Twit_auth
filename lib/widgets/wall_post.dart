@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 class Post extends StatelessWidget {
   final String msg;
   final String userEmail;
+  final int index;
 
-  Post({Key? key, required this.msg, required this.userEmail})
+  Post(
+      {Key? key,
+      required this.msg,
+      required this.userEmail,
+      required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Generate a random color for each post
-    final randomColor = Colors.primaries[
-        DateTime.now().microsecondsSinceEpoch % Colors.primaries.length];
+    // Determine the color based on the index
+    final Color postColor = index % 2 == 0 ? Colors.blue : Colors.grey;
 
     return Container(
       decoration: BoxDecoration(
-        color: randomColor, // Use the generated random color
+        color: postColor, // Use the determined color
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -36,15 +40,15 @@ class Post extends StatelessWidget {
               const Icon(
                 Icons.person,
                 size: 24,
-                color: Colors.white, // Icon color
+                color: Color.fromARGB(255, 20, 20, 20), // Icon color
               ),
               const SizedBox(width: 8),
               Text(
                 userEmail,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, // Text color
+                  color: Color.fromARGB(255, 0, 0, 0), // Text color
                 ),
               ),
             ],
@@ -53,7 +57,7 @@ class Post extends StatelessWidget {
           Text(
             msg,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 20,
               color: Colors.grey[200], // Text color
             ),
           ),

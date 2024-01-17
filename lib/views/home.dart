@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () {
-                signOut(); 
+                signOut();
               },
               icon: Image.asset(
                 'assets/log-out.png',
@@ -69,37 +69,44 @@ class _HomeState extends State<Home> {
         ),
         body: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            Color.fromARGB(255, 241, 241, 241).withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.account_circle,
-                    size: 32,
-                    color: Colors.white,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.account_circle,
+                        size: 32,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "Logged: ${currentUser.phoneNumber ?? currentUser.email ?? 'Unknown'}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 255, 0, 0),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  Text(
-                    "Logged: ${currentUser.phoneNumber ?? currentUser.email ?? 'Unknown'}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             Expanded(
@@ -117,6 +124,7 @@ class _HomeState extends State<Home> {
                         return Post(
                           msg: post["message"] ?? '',
                           userEmail: post["UserEmail"] ?? 'Unknown',
+                          index: index,
                         );
                       },
                     );

@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key, required void Function() onTap}) : super(key: key);
@@ -70,38 +70,46 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
         child: SingleChildScrollView(
-          // Wrap your Column with SingleChildScrollView
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 80,
+                height: 20,
               ),
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.create,
-                        size: 100,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.create,
+                          size: 60,
                           color: Colors.white,
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -112,11 +120,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
                       const SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
                       TextForm(
                         hinttext: 'Username',
@@ -134,7 +142,7 @@ class _SignUpState extends State<SignUp> {
                         controller: Confpasswordcontroller,
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Button(
                         onTap: () {

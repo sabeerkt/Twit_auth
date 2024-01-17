@@ -186,20 +186,17 @@ class _LoginPageState extends State<LoginPage> {
                             GestureDetector(
                               onTap: () async {
                                 await authService.signInWithGoogle();
-                                //signInWithGoogle();
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => PhoneSignIn()));
                               },
                               child: const SqureTile(
-                                  imagePath: "assets/google.png"),
+                                  imagePath: "assets/googlleee.png"),
                             ),
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
                                 AuthServicesGithub().signInWithGithub();
                               },
-                              child: const SqureTile(
-                                  imagePath: "assets/github.png"),
+                              child:
+                                  const SqureTile(imagePath: "assets/GITT.png"),
                             ),
                             const SizedBox(width: 10),
                             GestureDetector(
@@ -207,8 +204,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => const PhoneSignIn()));
                               },
-                              child:
-                                  const SqureTile(imagePath: "assets/otp.png"),
+                              child: const SqureTile(
+                                  imagePath: "assets/one-time-password.png"),
                             ),
                           ],
                         ),
