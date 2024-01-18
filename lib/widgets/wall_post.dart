@@ -21,7 +21,8 @@ class Post extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser!;
-    final Color postColor = index % 2 == 0 ? Colors.blue : Colors.grey;
+    final Color postColor =
+        index % 2 == 0 ? const Color.fromARGB(255, 175, 188, 198) : Colors.grey;
 
     return Container(
       decoration: BoxDecoration(
@@ -73,7 +74,7 @@ class Post extends StatelessWidget {
           ),
           if (currentUser.email == userEmail)
             Positioned(
-              top: 0,
+              bottom: 0,
               right: 0,
               child: DeleteButton(
                 onTap: () {

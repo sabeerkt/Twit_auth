@@ -57,6 +57,7 @@ class Home extends StatelessWidget {
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
                       const SizedBox(width: 10),
+                      Text("Home - ${authProvider.user?.email ?? 'No user'}")
                       // Add user information here if needed
                     ],
                   ),

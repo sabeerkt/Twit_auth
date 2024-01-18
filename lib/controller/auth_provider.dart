@@ -1,5 +1,3 @@
-
-
 import 'package:chats/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +7,12 @@ class AuthPro extends ChangeNotifier {
   AuthServices authservices = AuthServices();
   String? otpcode;
 
- final usernameController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final Confpasswordcontroller = TextEditingController();
 
   bool showLoginPage = true;
-  final isGoogleLoading=false;
+  final isGoogleLoading = false;
   //instance of auth
 
   User? _user;
@@ -25,6 +23,7 @@ class AuthPro extends ChangeNotifier {
       notifyListeners();
     });
   }
+
   User? get user => _user;
 
   void togglepages() {
@@ -35,10 +34,8 @@ class AuthPro extends ChangeNotifier {
 //sign user out
   Future<void> signOut() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signOut();
-     FirebaseAuth.instance.signOut();
-    
+    FirebaseAuth.instance.signOut();
   }
-  
 
   Future<UserCredential> signInWithEmailandPassword(
       String email, String password) async {
@@ -51,18 +48,17 @@ class AuthPro extends ChangeNotifier {
     return authservices.signUpWithEmailandPassword(email, password);
   }
 
-
-   //google sign in
-  Future<UserCredential> signInWithGoogle()async{
+  //google sign in
+  Future<UserCredential> signInWithGoogle() async {
     return authservices.signInWithGoogle();
   }
 
   signInWithGithub(context) {
     return authservices.signInWithGithub(context);
   }
-   otpSetter(value) {
+
+  otpSetter(value) {
     otpcode = value;
     notifyListeners();
   }
 }
-
