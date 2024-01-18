@@ -1,10 +1,7 @@
 import 'package:chats/controller/auth_provider.dart';
-
 import 'package:chats/views/register.dart';
 import 'package:chats/widgets/otp.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/tile.dart';
@@ -124,9 +121,7 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                             //  provider. signInWithGithub(context);
-                               // AuthServicesGithub().signInWithGithub();
-                               provider.signInWithGithub(context);
+                                provider.signInWithGithub(context);
                               },
                               child:
                                   const SqureTile(imagePath: "assets/GITT.png"),
@@ -134,8 +129,8 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => const PhoneSignIn()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const PhoneSignIn()));
                               },
                               child: const SqureTile(
                                   imagePath: "assets/one-time-password.png"),
@@ -143,6 +138,15 @@ class LoginPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10),
+                        const Text(
+                          "Don't have an account? Create one",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10), // Add some space after the text
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
