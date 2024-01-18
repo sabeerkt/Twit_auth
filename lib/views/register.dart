@@ -4,17 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:provider/provider.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends StatelessWidget {
   SignUp({Key? key, required void Function() onTap}) : super(key: key);
 
-  @override
-  State<SignUp> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +26,7 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 20,
+                height: 80,
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
@@ -113,6 +108,9 @@ class _SignUpState extends State<SignUp> {
                                   value.usernameController.text,
                                   value.passwordController.text,
                                 );
+                                value.usernameController.clear();
+                                value.passwordController.clear();
+                                value.Confpasswordcontroller.clear();
 
                                 // Navigate to the home screen after successful account creation
                                 Navigator.pushReplacement(

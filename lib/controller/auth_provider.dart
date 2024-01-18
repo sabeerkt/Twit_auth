@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPro extends ChangeNotifier {
   AuthServices authservices = AuthServices();
+  String? otpcode;
 
  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -54,6 +55,14 @@ class AuthPro extends ChangeNotifier {
    //google sign in
   Future<UserCredential> signInWithGoogle()async{
     return authservices.signInWithGoogle();
+  }
+
+  signInWithGithub(context) {
+    return authservices.signInWithGithub(context);
+  }
+   otpSetter(value) {
+    otpcode = value;
+    notifyListeners();
   }
 }
 

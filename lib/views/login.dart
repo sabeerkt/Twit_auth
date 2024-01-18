@@ -1,5 +1,5 @@
 import 'package:chats/controller/auth_provider.dart';
-import 'package:chats/services/git.dart';
+
 import 'package:chats/views/register.dart';
 import 'package:chats/widgets/otp.dart';
 
@@ -11,14 +11,9 @@ import 'package:chats/widgets/tile.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   LoginPage({Key? key, required void Function() onTap}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthPro>(context, listen: false);
@@ -107,12 +102,12 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 10),
                         Button(
                           onTap: () {
-                           provider. signInWithEmailandPassword(
-
-                            provider.usernameController.text,
-                            provider.passwordController.text,
-
-                           );
+                            provider.signInWithEmailandPassword(
+                              provider.usernameController.text,
+                              provider.passwordController.text,
+                            );
+                            provider.passwordController.clear();
+                            provider.usernameController.clear();
                           },
                         ),
                         const SizedBox(height: 10),
@@ -129,7 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                AuthServicesGithub().signInWithGithub();
+                             //  provider. signInWithGithub(context);
+                               // AuthServicesGithub().signInWithGithub();
+                               provider.signInWithGithub(context);
                               },
                               child:
                                   const SqureTile(imagePath: "assets/GITT.png"),
@@ -137,8 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const PhoneSignIn()));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => const PhoneSignIn()));
                               },
                               child: const SqureTile(
                                   imagePath: "assets/one-time-password.png"),

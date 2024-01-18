@@ -39,5 +39,14 @@ class DataBaseService {
       throw Exception(e.toString());
     }
   }
+   void deletePost(postid) {
+    //post delete
+    FirebaseFirestore.instance
+        .collection(collection)
+        .doc(postid)
+        .delete()
+        .then((value) => print('Deleted'))
+        .catchError((error) => print("faild to delete post:$error"));
+  }
 
 }

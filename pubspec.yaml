@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^6.2.1
   provider: ^6.1.1
   lottie: ^3.0.0
+  pinput: ^3.0.1
 
 dev_dependencies:
   flutter_test:

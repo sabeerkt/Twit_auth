@@ -1,52 +1,17 @@
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/controller/posts_provider.dart';
-import 'package:chats/model/msg.dart'; // Import your Message class
-import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  Home({Key? key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final currentUser = FirebaseAuth.instance.currentUser!;
-
-  // final User currentUser = FirebaseAuth.instance.currentUser!;
-
-  // void Postmsg() {
-  //   if (currentUser != null && textcontroller.text.isNotEmpty) {
-  //     Map<String, dynamic> postData = {
-  //       "message": textcontroller.text,
-  //       "timestamp": Timestamp.now(),
-  //     };
-
-  //     if (currentUser.phoneNumber != null) {
-  //       postData["UserPhoneNumber"] = currentUser.phoneNumber;
-  //     }
-
-  //     if (currentUser.email != null) {
-  //       postData["UserEmail"] = currentUser.email;
-  //     }
-
-  //     FirebaseFirestore.instance.collection("user post").add(postData);
-
-  //     // Clear the text field after posting the message
-  //     //textcontroller.clear();
-  //   }
-  // }
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthPro>(context, listen: false);
-    final postsprovider = Provider.of<PostProvider>(context, listen: false);
+    final postsProvider = Provider.of<PostProvider>(context, listen: false);
+    final currentUser = FirebaseAuth.instance.currentUser!;
 
     return SafeArea(
       child: Scaffold(
@@ -94,14 +59,7 @@ class _HomeState extends State<Home> {
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
                       const SizedBox(width: 10),
-                      // Text(
-                      //   "Logged: ${ provider. currentUser.phoneNumber ??provider. currentUser.email ?? 'Unknown'}",
-                      //   style: const TextStyle(
-                      //     fontSize: 16,
-                      //     fontWeight: FontWeight.bold,
-                      //     color: Color.fromARGB(255, 255, 0, 0),
-                      //   ),
-                      // ),
+                      // Add user information here if needed
                     ],
                   ),
                 ),
@@ -109,25 +67,27 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
               child: Consumer<PostProvider>(
-                builder: (context, postsprovider, child) {
-                  final posts = postsprovider.posts;
+                builder: (context, postsProvider, child) {
+                  final posts = postsProvider.posts;
+
                   if (posts.isEmpty) {
                     return Center(child: Text('No posts available.'));
                   } else {
                     return Expanded(
-                        child: ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) {
-                        final post = posts[index];
+                      child: ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
 
-                        return Post(
-                          msg: post['Message'],
-                          userEmail: post['UserEmail'],
-                          index: index,
-                          //postid: post.id,
-                        );
-                      },
-                    ));
+                          return Post(
+                            msg: post['Message'],
+                            userEmail: post['UserEmail'],
+                            index: index,
+                            postid: post.id,
+                          );
+                        },
+                      ),
+                    );
                   }
                 },
               ),
@@ -138,19 +98,18 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: TextForm(
-                      controller: postsprovider.textcontroller,
+                      controller: postsProvider.textcontroller,
                       hinttext: "Write",
                       obscureText: true,
                     ),
                   ),
                   IconButton(
                     onPressed: () async {
-                      postsprovider.addPost(currentUser.email!,
-                          postsprovider.textcontroller.text);
-                      postsprovider.textcontroller.clear();
-
-                      ///  Postmsg();
-                      // Implement sending the message
+                      postsProvider.addPost(
+                        currentUser.email!,
+                        postsProvider.textcontroller.text,
+                      );
+                      postsProvider.textcontroller.clear();
                     },
                     icon: const Icon(Icons.send),
                   ),

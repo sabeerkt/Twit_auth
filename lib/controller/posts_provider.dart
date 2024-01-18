@@ -32,7 +32,12 @@ class PostProvider extends ChangeNotifier {
     //update the post list after adding a new post
     await fetchPosts();
   }
+//delete post
+  Future<void> deletePost(postid) async {
+    postsservices.deletePost(postid);
 
+    await fetchPosts();
+  }
 
  
   
