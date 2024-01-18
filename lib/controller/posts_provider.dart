@@ -1,31 +1,39 @@
+import 'package:chats/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PostProvider extends ChangeNotifier {
  final User currentUser = FirebaseAuth.instance.currentUser!;
-   final textcontroller = TextEditingController();
+   DataBaseService postsservices = DataBaseService();
+  //text controller
+  final textcontroller = TextEditingController();
 
-  void Postmsg() {
-    if (currentUser != null && textcontroller.text.isNotEmpty) {
-      Map<String, dynamic> postData = {
-        "message": textcontroller.text,
-        "timestamp": Timestamp.now(),
-      };
+  List<DocumentSnapshot> posts = [];
 
-      if (currentUser.phoneNumber != null) {
-        postData["UserPhoneNumber"] = currentUser.phoneNumber;
-      }
+  PostsProvider() {
+    fetchPosts();
+  }
 
-      if (currentUser.email != null) {
-        postData["UserEmail"] = currentUser.email;
-      }
-
-      FirebaseFirestore.instance.collection("user post").add(postData);
-
-      // Clear the text field after posting the message
-      //textcontroller.clear();
+  //Fetch posts from Firebase Firestore
+  Future<void> fetchPosts() async {
+    try {
+      final querySnapshot = await postsservices.fetchPosts();
+      posts = querySnapshot.docs;
+      notifyListeners();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
+
+//add posts from firebasestore
+  Future<void> addPost(String user, String message) async {
+    postsservices.addPost(user, message);
+    //update the post list after adding a new post
+    await fetchPosts();
+  }
+
+
+ 
   
 }

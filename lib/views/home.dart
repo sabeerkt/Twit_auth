@@ -1,5 +1,7 @@
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/controller/posts_provider.dart';
+import 'package:chats/model/msg.dart'; // Import your Message class
+import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,18 +17,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
- 
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
+  // final User currentUser = FirebaseAuth.instance.currentUser!;
 
+  // void Postmsg() {
+  //   if (currentUser != null && textcontroller.text.isNotEmpty) {
+  //     Map<String, dynamic> postData = {
+  //       "message": textcontroller.text,
+  //       "timestamp": Timestamp.now(),
+  //     };
 
-  
-  
+  //     if (currentUser.phoneNumber != null) {
+  //       postData["UserPhoneNumber"] = currentUser.phoneNumber;
+  //     }
+
+  //     if (currentUser.email != null) {
+  //       postData["UserEmail"] = currentUser.email;
+  //     }
+
+  //     FirebaseFirestore.instance.collection("user post").add(postData);
+
+  //     // Clear the text field after posting the message
+  //     //textcontroller.clear();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthPro>(context,listen: false);
-    final providerPOst = Provider.of<PostProvider>(context,listen: false);
-
+    final provider = Provider.of<AuthPro>(context, listen: false);
+    final postsprovider = Provider.of<PostProvider>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
@@ -35,7 +55,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () {
-               provider. signOut();
+                provider.signOut();
               },
               icon: Image.asset(
                 'assets/log-out.png',
@@ -88,32 +108,27 @@ class _HomeState extends State<Home> {
               ),
             ),
             Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("user post")
-                    .orderBy("timestamp", descending: false)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
+              child: Consumer<PostProvider>(
+                builder: (context, postsprovider, child) {
+                  final posts = postsprovider.posts;
+                  if (posts.isEmpty) {
+                    return Center(child: Text('No posts available.'));
+                  } else {
+                    return Expanded(
+                        child: ListView.builder(
+                      itemCount: posts.length,
                       itemBuilder: (context, index) {
-                        final post = snapshot.data!.docs[index];
+                        final post = posts[index];
+
                         return Post(
-                          msg: post["message"] ?? '',
-                          userEmail: post["UserEmail"] ?? 'Unknown',
+                          msg: post['Message'],
+                          userEmail: post['UserEmail'],
                           index: index,
+                          //postid: post.id,
                         );
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text("Error: ${snapshot.error.toString()}"),
-                    );
+                    ));
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
                 },
               ),
             ),
@@ -123,14 +138,19 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: TextForm(
-                      controller:providerPOst. textcontroller,
+                      controller: postsprovider.textcontroller,
                       hinttext: "Write",
                       obscureText: true,
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                     providerPOst. Postmsg();
+                    onPressed: () async {
+                      postsprovider.addPost(currentUser.email!,
+                          postsprovider.textcontroller.text);
+                      postsprovider.textcontroller.clear();
+
+                      ///  Postmsg();
+                      // Implement sending the message
                     },
                     icon: const Icon(Icons.send),
                   ),

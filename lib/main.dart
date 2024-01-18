@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AuthPro(),
         ),
-        ChangeNotifierProvider(create: (context) => PostProvider(),)
+         ChangeNotifierProvider(create: (context) => PostProvider(),)
 
       ],
       child: MaterialApp(
