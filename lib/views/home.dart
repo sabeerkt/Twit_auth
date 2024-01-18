@@ -1,8 +1,11 @@
+import 'package:chats/controller/auth_provider.dart';
+import 'package:chats/controller/posts_provider.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key});
@@ -12,44 +15,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final textcontroller = TextEditingController();
+ 
 
-  void Postmsg() {
-    if (currentUser != null && textcontroller.text.isNotEmpty) {
-      Map<String, dynamic> postData = {
-        "message": textcontroller.text,
-        "timestamp": Timestamp.now(),
-      };
 
-      if (currentUser.phoneNumber != null) {
-        postData["UserPhoneNumber"] = currentUser.phoneNumber;
-      }
 
-      if (currentUser.email != null) {
-        postData["UserEmail"] = currentUser.email;
-      }
-
-      FirebaseFirestore.instance.collection("user post").add(postData);
-
-      // Clear the text field after posting the message
-      textcontroller.clear();
-    }
-  }
-
-  late User currentUser;
-
-  @override
-  void initState() {
-    super.initState();
-    currentUser = FirebaseAuth.instance.currentUser!;
-  }
-
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AuthPro>(context,listen: false);
+    final providerPOst = Provider.of<PostProvider>(context,listen: false);
+
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -57,7 +35,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () {
-                signOut();
+               provider. signOut();
               },
               icon: Image.asset(
                 'assets/log-out.png',
@@ -96,14 +74,14 @@ class _HomeState extends State<Home> {
                         color: Color.fromARGB(255, 0, 0, 0),
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        "Logged: ${currentUser.phoneNumber ?? currentUser.email ?? 'Unknown'}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 255, 0, 0),
-                        ),
-                      ),
+                      // Text(
+                      //   "Logged: ${ provider. currentUser.phoneNumber ??provider. currentUser.email ?? 'Unknown'}",
+                      //   style: const TextStyle(
+                      //     fontSize: 16,
+                      //     fontWeight: FontWeight.bold,
+                      //     color: Color.fromARGB(255, 255, 0, 0),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -145,14 +123,14 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: TextForm(
-                      controller: textcontroller,
+                      controller:providerPOst. textcontroller,
                       hinttext: "Write",
                       obscureText: true,
                     ),
                   ),
                   IconButton(
                     onPressed: () {
-                      Postmsg();
+                     providerPOst. Postmsg();
                     },
                     icon: const Icon(Icons.send),
                   ),

@@ -1,8 +1,11 @@
+import 'package:chats/controller/auth_provider.dart';
+import 'package:chats/widgets/sign_dlg.dart';
 import 'package:flutter/material.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key, required void Function() onTap}) : super(key: key);
@@ -12,52 +15,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final Confpasswordcontroller = TextEditingController();
-
-  void signUp() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-    if (passwordController.text != Confpasswordcontroller.text) {
-      Navigator.pop(context);
-      displaydlg("Passwords do not match");
-      return;
-    }
-    try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: usernameController.text, password: passwordController.text)
-          .then((userCredential) {
-        Navigator.pop(context); // Dismiss the loading dialog
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Home()),
-        );
-      });
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      displaydlg(e.code);
-    }
-  }
-
-  void displaydlg(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(message),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,13 +38,13 @@ class _SignUpState extends State<SignUp> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
-                    SizedBox(width: 20),
-                    Column(
+                    const SizedBox(width: 20),
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
@@ -119,37 +76,62 @@ class _SignUpState extends State<SignUp> {
                     topRight: Radius.circular(60),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextForm(
-                        hinttext: 'Username',
-                        obscureText: true,
-                        controller: usernameController,
-                      ),
-                      TextForm(
-                        hinttext: 'Password',
-                        obscureText: true,
-                        controller: passwordController,
-                      ),
-                      TextForm(
-                        hinttext: 'Confirm Password',
-                        obscureText: true,
-                        controller: Confpasswordcontroller,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Button(
-                        onTap: () {
-                          signUp();
-                        },
-                      ),
-                    ],
+                child: Consumer<AuthPro>(
+                  builder: (context, value, child) => Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextForm(
+                          hinttext: 'Username',
+                          obscureText: true,
+                          controller: value.usernameController,
+                        ),
+                        TextForm(
+                          hinttext: 'Password',
+                          obscureText: true,
+                          controller: value.passwordController,
+                        ),
+                        TextForm(
+                          hinttext: 'Confirm Password',
+                          obscureText: true,
+                          controller: value.Confpasswordcontroller,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Button(
+                          onTap: () async {
+                            // Check if the password and confirmation password match
+                            if (value.passwordController.text ==
+                                value.Confpasswordcontroller.text) {
+                              try {
+                                // If they match, call the signUpWithEmailandPassword method
+                                await value.signUpWithEmailandPassword(
+                                  value.usernameController.text,
+                                  value.passwordController.text,
+                                );
+
+                                // Navigate to the home screen after successful account creation
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Home()),
+                                );
+                              } catch (e) {
+                                // Handle any errors that occur during account creation
+                                print("Error creating account: $e");
+                              }
+                            } else {
+                              // If passwords don't match, you can show an error message or handle it as needed
+                              Main_Dailog("Passwords do not match");
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

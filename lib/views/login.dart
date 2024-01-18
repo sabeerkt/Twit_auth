@@ -1,15 +1,15 @@
+import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/services/git.dart';
 import 'package:chats/views/register.dart';
 import 'package:chats/widgets/otp.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/tile.dart';
 import 'package:lottie/lottie.dart';
-
-import '../services/auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key, required void Function() onTap}) : super(key: key);
@@ -19,80 +19,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  // final GoogleSignIn _googleSignIn = GoogleSignIn();
-  Authservice authService = Authservice();
-
-  void signIn() async {
-    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
-      // Alert user to fill in both fields
-      displayDialog("Please fill in both Username and Password fields.");
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text,
-        password: passwordController.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      displayDialog(e.message ?? "Login failed");
-    } finally {
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context);
-      }
-    }
-  }
-
-  void displayDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            message,
-            style: const TextStyle(
-              // Customize the text style if needed
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-          actions: <Widget>[
-            // Add additional actions or buttons if needed
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Perform any additional actions on button press
-              },
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  // Customize the button text style if needed
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Colors.blue,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AuthPro>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -147,12 +76,12 @@ class _LoginPageState extends State<LoginPage> {
                         TextForm(
                           hinttext: 'Username',
                           obscureText: true,
-                          controller: usernameController,
+                          controller: provider.usernameController,
                         ),
                         TextForm(
                           hinttext: 'Password',
                           obscureText: true,
-                          controller: passwordController,
+                          controller: provider.passwordController,
                         ),
                         const SizedBox(height: 10),
                         Padding(
@@ -177,7 +106,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 10),
                         Button(
-                          onTap: signIn,
+                          onTap: () {
+                           provider. signInWithEmailandPassword(
+
+                            provider.usernameController.text,
+                            provider.passwordController.text,
+
+                           );
+                          },
                         ),
                         const SizedBox(height: 10),
                         Row(
@@ -185,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                await authService.signInWithGoogle();
+                                await provider.signInWithGoogle();
                               },
                               child: const SqureTile(
                                   imagePath: "assets/googlleee.png"),

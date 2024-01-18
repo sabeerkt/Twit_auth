@@ -18,18 +18,9 @@ class AuthServicesGithub {
       firestore.collection("users").doc(gituser.uid).set(userdata.toJson());
       return user;
     } catch (e) {
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(SnackBar(content: Text(e.toString())));
+     
       throw Exception(e);
     }
-    //   final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-
-    //   final GoogleSignInAuthentication gAuth = await gUser!.authentication;
-
-    //   final credential = GoogleAuthProvider.credential(
-    //     accessToken: gAuth.accessToken,
-    //     idToken: gAuth.idToken,
-    //   );
-    //   return await FirebaseAuth.instance.signInWithCredential(credential);
+    
   }
 }
