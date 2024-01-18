@@ -1,5 +1,5 @@
 import 'package:chats/controller/auth_provider.dart';
-import 'package:chats/widgets/sign_dlg.dart';
+import 'package:chats/widgets/Main_Dailog.dart';
 import 'package:flutter/material.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
@@ -124,7 +124,7 @@ class SignUp extends StatelessWidget {
                               }
                             } else {
                               // If passwords don't match, you can show an error message or handle it as needed
-                              Main_Dailog("Passwords do not match");
+                              const Main_Dailog("Passwords do not match");
                             }
                           },
                         ),

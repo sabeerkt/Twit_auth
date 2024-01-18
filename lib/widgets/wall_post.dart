@@ -1,8 +1,8 @@
-import 'package:chats/controller/posts_provider.dart';
 import 'package:chats/widgets/dlt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:chats/controller/posts_provider.dart';
 
 class Post extends StatelessWidget {
   final String msg;
@@ -10,24 +10,22 @@ class Post extends StatelessWidget {
   final int index;
   final String postid;
 
-  Post(
-      {Key? key,
-      required this.msg,
-      required this.userEmail,
-      required this.index,
-      required this.postid})
-      : super(key: key);
-
-  final currentUser = FirebaseAuth.instance.currentUser!;
+  Post({
+    Key? key,
+    required this.msg,
+    required this.userEmail,
+    required this.index,
+    required this.postid,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Determine the color based on the index
+    final currentUser = FirebaseAuth.instance.currentUser!;
     final Color postColor = index % 2 == 0 ? Colors.blue : Colors.grey;
 
     return Container(
       decoration: BoxDecoration(
-        color: postColor, // Use the determined color
+        color: postColor,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
@@ -50,7 +48,7 @@ class Post extends StatelessWidget {
                   const Icon(
                     Icons.person,
                     size: 24,
-                    color: Color.fromARGB(255, 20, 20, 20), // Icon color
+                    color: Color.fromARGB(255, 20, 20, 20),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -58,7 +56,7 @@ class Post extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 0, 0, 0), // Text color
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 ],
@@ -68,7 +66,7 @@ class Post extends StatelessWidget {
                 msg,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.grey[200], // Text color
+                  color: Colors.grey[200],
                 ),
               ),
             ],
@@ -78,17 +76,15 @@ class Post extends StatelessWidget {
               top: 0,
               right: 0,
               child: DeleteButton(
-                // Delete a post
                 onTap: () {
-                  // Show a dialog box asking for confirmation before deleting the post
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('Delete Post'),
                       content: const Text(
-                          'Are you sure you want to delete this post?'),
+                        'Are you sure you want to delete this post?',
+                      ),
                       actions: [
-                        // CANCEL BUTTON
                         TextButton(
                           onPressed: () => Navigator.pop(context),
                           child: const Text(
@@ -96,15 +92,11 @@ class Post extends StatelessWidget {
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
-
-                        // DELETE BUTTON
                         TextButton(
                           onPressed: () async {
-                            // Post delete
                             Provider.of<PostProvider>(context, listen: false)
                                 .deletePost(postid);
 
-                            // Dismiss the dialog
                             Navigator.pop(context);
                           },
                           child: const Text(

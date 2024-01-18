@@ -9,9 +9,7 @@ import 'package:provider/provider.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AuthPro>(context, listen: false);
-    final postsProvider = Provider.of<PostProvider>(context, listen: false);
-    final currentUser = FirebaseAuth.instance.currentUser!;
+    final authProvider = Provider.of<AuthPro>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
@@ -20,7 +18,7 @@ class Home extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                provider.signOut();
+                authProvider.signOut();
               },
               icon: Image.asset(
                 'assets/log-out.png',
@@ -65,32 +63,32 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: Consumer<PostProvider>(
-                builder: (context, postsProvider, child) {
-                  final posts = postsProvider.posts;
+            Consumer<PostProvider>(
+              builder: (context, postsProvider, child) {
+                final posts = postsProvider.posts;
 
-                  if (posts.isEmpty) {
-                    return Center(child: Text('No posts available.'));
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: posts.length,
-                        itemBuilder: (context, index) {
-                          final post = posts[index];
+                if (posts.isEmpty) {
+                  return Center(child: Text('No posts available.'));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        final post = posts[index];
 
-                          return Post(
-                            msg: post['Message'],
-                            userEmail: post['UserEmail'],
-                            index: index,
-                            postid: post.id,
-                          );
-                        },
-                      ),
-                    );
-                  }
-                },
-              ),
+                        return Post(
+                          msg: post['Message'],
+                          userEmail: post['UserEmail'],
+                          index: index,
+                          postid: post.id,
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(25),
@@ -98,15 +96,18 @@ class Home extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextForm(
-                      controller: postsProvider.textcontroller,
+                      controller:
+                          Provider.of<PostProvider>(context).textcontroller,
                       hinttext: "Write",
                       obscureText: true,
                     ),
                   ),
                   IconButton(
                     onPressed: () async {
+                      final postsProvider =
+                          Provider.of<PostProvider>(context, listen: false);
                       postsProvider.addPost(
-                        currentUser.email!,
+                        FirebaseAuth.instance.currentUser!.email!,
                         postsProvider.textcontroller.text,
                       );
                       postsProvider.textcontroller.clear();

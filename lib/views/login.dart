@@ -1,6 +1,7 @@
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/views/register.dart';
 import 'package:chats/widgets/otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/button.dart';
@@ -98,15 +99,68 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Button(
-                          onTap: () {
-                            provider.signInWithEmailandPassword(
-                              provider.usernameController.text,
-                              provider.passwordController.text,
-                            );
-                            provider.passwordController.clear();
-                            provider.usernameController.clear();
+                          onTap: () async {
+                            String username =
+                                provider.usernameController.text.trim();
+                            String password =
+                                provider.passwordController.text.trim();
+
+                            if (username.isEmpty || password.isEmpty) {
+                              // Show an alert if email or password is not typed properly
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Incomplete Information'),
+                                    content: const Text(
+                                        'Please enter both username and password.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              try {
+                                UserCredential userCredential =
+                                    await provider.signInWithEmailandPassword(
+                                        username, password);
+
+                                // Do something with userCredential if needed
+
+                                // User exists, clear controllers
+                                provider.passwordController.clear();
+                                provider.usernameController.clear();
+                              } catch (e) {
+                                // Show an alert that the user does not exist
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('User Not Found'),
+                                      content: const Text(
+                                          'The entered username or password is incorrect.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            }
                           },
                         ),
+
                         const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +200,8 @@ class LoginPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10), // Add some space after the text
+                        const SizedBox(
+                            height: 10), // Add some space after the text
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
