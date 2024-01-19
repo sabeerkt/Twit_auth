@@ -46,4 +46,6 @@ class DataBaseService {
       print("Error deleting post: $e");
     }
   }
+
+  getDataOrderByTimestamp() {}
 }

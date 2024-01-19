@@ -1,3 +1,4 @@
+import 'package:chats/widgets/dlt.dart';
 import 'package:chats/widgets/like.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,6 +68,11 @@ class _PostState extends State<Post> {
         ? const Color.fromARGB(255, 175, 188, 198)
         : Colors.grey;
 
+    // Extracting the first letter of the username for the avatar
+    String avatarLetter = widget.userEmail.isNotEmpty
+        ? widget.userEmail.substring(0, 1).toUpperCase()
+        : '';
+
     return Container(
       decoration: BoxDecoration(
         color: postColor,
@@ -87,14 +93,22 @@ class _PostState extends State<Post> {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.person,
-                size: 24,
-                color: Color.fromARGB(255, 20, 20, 20),
+              const SizedBox(width: 8),
+              // Circular avatar with the first letter of the username
+              CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: Text(
+                  avatarLetter,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
+              // Showing username in uppercase
               Text(
-                widget.userEmail,
+                widget.userEmail.toUpperCase(),
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -106,53 +120,23 @@ class _PostState extends State<Post> {
           const SizedBox(height: 8),
           Text(
             widget.msg,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
-              color: Colors.grey[200],
+              color: Color.fromARGB(255, 29, 122, 199),
             ),
           ),
           Like(
             isliked: isliked,
             onTap: toggle,
           ),
-          Text(widget.Likes.length.toString()),
           if (currentUser.email == widget.userEmail)
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Delete Post'),
-                        content: const Text(
-                          'Are you sure you want to delete this post?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text(
-                              "Cancel",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Provider.of<PostProvider>(context, listen: false)
-                                  .deletePost(widget.postid);
-
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              "Delete",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
+                DeleteButton(
+                  onTap: () {
+                    Provider.of<PostProvider>(context, listen: false)
+                        .deletePost(widget.postid);
                   },
                 ),
               ],

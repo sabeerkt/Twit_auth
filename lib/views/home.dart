@@ -19,7 +19,7 @@ class Home extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          title: Text(
+          title: const Text(
             "Home",
             style: TextStyle(
               fontSize: 20,
@@ -51,7 +51,7 @@ class Home extends StatelessWidget {
                   }
 
                   if (!snapshot.hasData || snapshot.data == null) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   final List<Mesaage> posts = snapshot.data!.docs
@@ -61,6 +61,7 @@ class Home extends StatelessWidget {
                       .toList();
 
                   return ListView.builder(
+                    reverse: true,
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       Mesaage post = posts[index];
