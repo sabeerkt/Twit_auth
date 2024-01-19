@@ -41,7 +41,7 @@ class SignUp extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Lottie.asset(
-                              'assets/regis.json', // Replace with the path to your Lottie animation file
+                              'assets/regis.json',
                               height: 100,
                               width: 100,
                             ),
@@ -100,6 +100,31 @@ class SignUp extends StatelessWidget {
                         Button(
                           name: "Register",
                           onTap: () async {
+                            // Check if any field is empty
+                            if (value.usernameController.text.isEmpty ||
+                                value.passwordController.text.isEmpty ||
+                                value.Confpasswordcontroller.text.isEmpty) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Error"),
+                                    content: const Text(
+                                        "All fields must be filled out."),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              return;
+                            }
+
                             // Check if the password and confirmation password match
                             if (value.passwordController.text ==
                                 value.Confpasswordcontroller.text) {
@@ -124,8 +149,25 @@ class SignUp extends StatelessWidget {
                                 print("Error creating account: $e");
                               }
                             } else {
-                              // If passwords don't match, you can show an error message or handle it as needed
-                              const Main_Dailog("Passwords do not match");
+                              // If passwords don't match, show an error message
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Error"),
+                                    content:
+                                        const Text("Passwords do not match."),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             }
                           },
                         ),

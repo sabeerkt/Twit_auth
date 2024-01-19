@@ -1,3 +1,4 @@
+import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/dlt.dart';
 import 'package:chats/widgets/like.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -110,9 +111,9 @@ class _PostState extends State<Post> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'User Name :', // Add your desired text here
-                    style: const TextStyle(
+                  const Text(
+                    'User Name :',
+                    style: TextStyle(
                       fontSize: 12,
                       color: Color.fromARGB(255, 255, 8, 8),
                     ),
@@ -129,10 +130,10 @@ class _PostState extends State<Post> {
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           const SizedBox(height: 8),
           Text(
-            widget.msg,
+            DataBaseService().capitalizeFirstLetter(widget.msg),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

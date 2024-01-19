@@ -47,5 +47,18 @@ class DataBaseService {
     }
   }
 
-  getDataOrderByTimestamp() {}
+  String capitalizeFirstLetter(String text) {
+    if (text == null || text.isEmpty) {
+      return text;
+    }
+    return text.split(' ').map((word) {
+      if (word.isNotEmpty) {
+        return word[0].toUpperCase() + word.substring(1);
+      } else {
+        return word;
+      }
+    }).join(' ');
+  }
+
+  
 }

@@ -5,6 +5,8 @@ class Main_Dailog extends StatefulWidget {
 
   @override
   State<Main_Dailog> createState() => _MainDialogState();
+
+  void show(BuildContext context) {}
 }
 
 class _MainDialogState extends State<Main_Dailog> {
