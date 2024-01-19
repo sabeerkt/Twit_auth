@@ -64,9 +64,11 @@ class Home extends StatelessWidget {
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       Mesaage post = posts[index];
-                      return ListTile(
-                        title: Text(post.message ?? ''),
-                        subtitle: Text(post.email ?? ''),
+                      return Post(
+                        msg: post.message ?? '',
+                        userEmail: post.email ?? '',
+                        index: index,
+                        postid: post.id ??"",
                       );
                     },
                   );
