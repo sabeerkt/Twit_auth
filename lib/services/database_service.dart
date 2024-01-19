@@ -20,12 +20,13 @@ class DataBaseService {
     });
   }
 
-  Future<void> addPost(String user, String message) async {
+  Future<void> addPost(String user, String message, List<String> Likes) async {
     try {
       await messageRef.add(
         Mesaage(
           email: user,
           message: message,
+          Likes: Likes,
         ),
       );
     } catch (e) {

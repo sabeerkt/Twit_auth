@@ -68,7 +68,8 @@ class Home extends StatelessWidget {
                         msg: post.message ?? '',
                         userEmail: post.email ?? '',
                         index: index,
-                        postid: post.id ??"",
+                        postid: post.id ?? "",
+                        Likes: [],
                       );
                     },
                   );
