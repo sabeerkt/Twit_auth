@@ -18,6 +18,7 @@ class Home extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           title: const Text(
             "Twit",
@@ -101,7 +102,6 @@ class Home extends StatelessWidget {
                         );
                         postsProvider.textcontroller.clear();
                       } else {
-                        
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content:

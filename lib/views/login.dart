@@ -1,3 +1,4 @@
+import 'package:chats/constant/const.dart';
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/views/register.dart';
 import 'package:chats/widgets/otp.dart';
@@ -21,7 +22,7 @@ class LoginPage extends StatelessWidget {
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.deepOrange, Colors.white],
+                colors: gradient,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -139,6 +140,7 @@ class LoginPage extends StatelessWidget {
                                 provider.usernameController.clear();
                               } catch (e) {
                                 // Show an alert that the user does not exist
+                                // ignore: use_build_context_synchronously
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
