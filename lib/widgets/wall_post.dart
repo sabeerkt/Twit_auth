@@ -106,23 +106,37 @@ class _PostState extends State<Post> {
                 ),
               ),
               const SizedBox(width: 8),
-              // Showing username in uppercase
-              Text(
-                widget.userEmail.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
+              // Showing additional text and then the username in uppercase
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'User Name :', // Add your desired text here
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 255, 8, 8),
+                    ),
+                  ),
+                  Text(
+                    widget.userEmail.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 130, 119, 119),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
+          Divider(),
           const SizedBox(height: 8),
           Text(
             widget.msg,
             style: const TextStyle(
               fontSize: 20,
-              color: Color.fromARGB(255, 29, 122, 199),
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
           Like(
