@@ -99,6 +99,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Button(
+                          name: "sign",
                           onTap: () async {
                             String username =
                                 provider.usernameController.text.trim();

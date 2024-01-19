@@ -1,9 +1,13 @@
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/controller/posts_provider.dart';
+import 'package:chats/model/msg.dart';
+import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
@@ -15,12 +19,12 @@ class Home extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          title: const Text(
+          title: Text(
             "Home",
             style: TextStyle(
-              fontSize: 20, // Set the font size to 20
-              fontWeight: FontWeight.bold, // Make the text bold
-              color: Colors.white, // Set the text color to white
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
           actions: [
@@ -38,66 +42,36 @@ class Home extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            const Color.fromARGB(255, 241, 241, 241).withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.account_circle,
-                        size: 32,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      const SizedBox(width: 10),
-                      Text("Home - ${authProvider.user?.email ?? 'No user'}")
-                      // Add user information here if needed
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Consumer<PostProvider>(
-              builder: (context, postsProvider, child) {
-                final posts = postsProvider.posts;
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Mesaage>>(
+                stream: DataBaseService().getData(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  }
 
-                if (posts.isEmpty) {
-                  return const Center(child: Text('No posts available.'));
-                } else {
-                  return Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) {
-                        final post = posts[index];
+                  if (!snapshot.hasData || snapshot.data == null) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                        return Post(
-                          msg: post['Message'],
-                          userEmail: post['UserEmail'],
-                          index: index,
-                          postid: post.id,
-                        );
-                      },
-                    ),
+                  final List<Mesaage> posts = snapshot.data!.docs
+                      .map(
+                        (doc) => doc.data(),
+                      )
+                      .toList();
+
+                  return ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      Mesaage post = posts[index];
+                      return ListTile(
+                        title: Text(post.message ?? ''),
+                        subtitle: Text(post.email ?? ''),
+                      );
+                    },
                   );
-                }
-              },
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(25),

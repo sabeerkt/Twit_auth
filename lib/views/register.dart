@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:chats/views/home.dart';
 import 'package:chats/widgets/button.dart';
 import 'package:chats/widgets/textform.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:provider/provider.dart';
 
@@ -26,36 +27,35 @@ class SignUp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 80,
+                height: 100,
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.create,
-                          size: 60,
-                          color: Colors.white,
+                    const SizedBox(width: 100),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/regis.json', // Replace with the path to your Lottie animation file
+                              height: 100,
+                              width: 100,
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              "Register",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -98,6 +98,7 @@ class SignUp extends StatelessWidget {
                           height: 20,
                         ),
                         Button(
+                          name: "Register",
                           onTap: () async {
                             // Check if the password and confirmation password match
                             if (value.passwordController.text ==
@@ -128,6 +129,15 @@ class SignUp extends StatelessWidget {
                             }
                           },
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Button(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          name: "Back",
+                        )
                       ],
                     ),
                   ),
