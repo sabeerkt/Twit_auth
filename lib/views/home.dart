@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           title: const Text(
-            "Home",
+            "Twit",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -61,7 +61,6 @@ class Home extends StatelessWidget {
                       .toList();
 
                   return ListView.builder(
-                    reverse: true,
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       Mesaage post = posts[index];
@@ -70,7 +69,7 @@ class Home extends StatelessWidget {
                         userEmail: post.email ?? '',
                         index: index,
                         postid: post.id ?? "",
-                        Likes: [],
+                        Likes: post.Likes ?? [],
                       );
                     },
                   );
@@ -93,11 +92,23 @@ class Home extends StatelessWidget {
                     onPressed: () async {
                       final postsProvider =
                           Provider.of<PostProvider>(context, listen: false);
-                      postsProvider.addPost(
-                        FirebaseAuth.instance.currentUser!.email!,
-                        postsProvider.textcontroller.text,
-                      );
-                      postsProvider.textcontroller.clear();
+
+                      // Check if the text field is not empty
+                      if (postsProvider.textcontroller.text.trim().isNotEmpty) {
+                        postsProvider.addPost(
+                          FirebaseAuth.instance.currentUser!.email!,
+                          postsProvider.textcontroller.text,
+                        );
+                        postsProvider.textcontroller.clear();
+                      } else {
+                        
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('Please enter a message before posting.'),
+                          ),
+                        );
+                      }
                     },
                     icon: const Icon(Icons.send),
                   ),

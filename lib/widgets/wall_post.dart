@@ -65,8 +65,8 @@ class _PostState extends State<Post> {
     final currentUser = FirebaseAuth.instance.currentUser!;
 
     final Color postColor = widget.index % 2 == 0
-        ? const Color.fromARGB(255, 175, 188, 198)
-        : Colors.grey;
+        ? Color.fromARGB(255, 255, 255, 255)
+        : const Color.fromARGB(255, 255, 255, 255);
 
     // Extracting the first letter of the username for the avatar
     String avatarLetter = widget.userEmail.isNotEmpty
@@ -96,7 +96,7 @@ class _PostState extends State<Post> {
               const SizedBox(width: 8),
               // Circular avatar with the first letter of the username
               CircleAvatar(
-                backgroundColor: Colors.blue,
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                 child: Text(
                   avatarLetter,
                   style: const TextStyle(

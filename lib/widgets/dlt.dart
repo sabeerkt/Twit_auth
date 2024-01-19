@@ -13,7 +13,7 @@ class DeleteButton extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: const Color.fromARGB(255, 212, 205, 205).withOpacity(0.7),
+          color: Color.fromARGB(255, 188, 98, 98).withOpacity(0.7),
         ),
         child: Icon(
           Icons.delete,
