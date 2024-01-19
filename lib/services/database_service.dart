@@ -1,5 +1,6 @@
-import 'package:chats/model/msg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chats/model/msg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DataBaseService {
   String collection = 'User Post';
@@ -47,6 +48,24 @@ class DataBaseService {
     }
   }
 
+  Future<void> toggleLike(String postId, bool isLiked) async {
+    DocumentReference postref = firestore.collection(collection).doc(postId);
+    if (isLiked) {
+      postref.update({
+        'Likes': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.email])
+      });
+    } else {
+      postref.update({
+        'Likes': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.email])
+      });
+    }
+  }
+
+  Future<List<Mesaage>> getAllPosts() async {
+    QuerySnapshot<Mesaage> snapshot = await messageRef.get();
+    return snapshot.docs.map((doc) => doc.data()).toList();
+  }
+
   String capitalizeFirstLetter(String text) {
     if (text == null || text.isEmpty) {
       return text;
@@ -59,6 +78,4 @@ class DataBaseService {
       }
     }).join(' ');
   }
-
-  
 }

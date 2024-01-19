@@ -1,3 +1,5 @@
+import 'package:chats/controller/posts_provider.dart';
+import 'package:chats/model/msg.dart';
 import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/dlt.dart';
 import 'package:chats/widgets/like.dart';
@@ -5,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chats/controller/posts_provider.dart';
 
 class Post extends StatefulWidget {
   final String msg;
@@ -28,48 +29,22 @@ class Post extends StatefulWidget {
 }
 
 class _PostState extends State<Post> {
-  late bool isliked;
+  late bool isLiked;
+  late int likeCount;
 
   @override
   void initState() {
     super.initState();
-    isliked = widget.Likes.contains(FirebaseAuth.instance.currentUser!.email);
-  }
-
-  void toggle() {
-    setState(() {
-      isliked = !isliked;
-      if (isliked) {
-        widget.Likes.add(FirebaseAuth.instance.currentUser!.email!);
-      } else {
-        widget.Likes.remove(FirebaseAuth.instance.currentUser!.email!);
-      }
-    });
-
-    DocumentReference postref =
-        FirebaseFirestore.instance.collection('User Post').doc(widget.postid);
-    if (isliked) {
-      postref.update({
-        'Likes':
-            FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.email])
-      });
-    } else {
-      postref.update({
-        'Likes':
-            FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.email])
-      });
-    }
+    isLiked = widget.Likes.contains(FirebaseAuth.instance.currentUser!.email);
+    likeCount = widget.Likes.length;
   }
 
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser!;
-
     final Color postColor = widget.index % 2 == 0
         ? Color.fromARGB(255, 255, 255, 255)
         : const Color.fromARGB(255, 255, 255, 255);
-
-    // Extracting the first letter of the username for the avatar
     String avatarLetter = widget.userEmail.isNotEmpty
         ? widget.userEmail.substring(0, 1).toUpperCase()
         : '';
@@ -95,7 +70,6 @@ class _PostState extends State<Post> {
           Row(
             children: [
               const SizedBox(width: 8),
-              // Circular avatar with the first letter of the username
               CircleAvatar(
                 backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                 child: Text(
@@ -107,7 +81,6 @@ class _PostState extends State<Post> {
                 ),
               ),
               const SizedBox(width: 8),
-              // Showing additional text and then the username in uppercase
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,9 +113,40 @@ class _PostState extends State<Post> {
               color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
-          Like(
-            isliked: isliked,
-            onTap: toggle,
+          Row(
+            children: [
+              Like(
+                isliked: isLiked,
+                onTap: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                    if (isLiked) {
+                      widget.Likes.add(FirebaseAuth.instance.currentUser!.email!);
+                    } else {
+                      widget.Likes.remove(FirebaseAuth.instance.currentUser!.email!);
+                    }
+                    likeCount = widget.Likes.length;
+                  });
+
+                  DocumentReference postref =
+                      FirebaseFirestore.instance.collection('User Post').doc(widget.postid);
+                  if (isLiked) {
+                    postref.update({
+                      'Likes': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.email])
+                    });
+                  } else {
+                    postref.update({
+                      'Likes': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.email])
+                    });
+                  }
+
+                  Provider.of<PostProvider>(context, listen: false)
+                      .toggleLike(widget.postid, isLiked);
+                }, 
+              ),
+              const SizedBox(width: 8),
+              Text('$likeCount likes'),
+            ],
           ),
           if (currentUser.email == widget.userEmail)
             Row(
