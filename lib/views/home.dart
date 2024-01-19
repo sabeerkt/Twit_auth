@@ -14,7 +14,15 @@ class Home extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Home"),
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          title: const Text(
+            "Home",
+            style: TextStyle(
+              fontSize: 20, // Set the font size to 20
+              fontWeight: FontWeight.bold, // Make the text bold
+              color: Colors.white, // Set the text color to white
+            ),
+          ),
           actions: [
             IconButton(
               onPressed: () {
@@ -37,12 +45,12 @@ class Home extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: const Color.fromARGB(255, 255, 255, 255),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color:
-                            Color.fromARGB(255, 241, 241, 241).withOpacity(0.5),
+                            const Color.fromARGB(255, 241, 241, 241).withOpacity(0.5),
                         spreadRadius: 2,
                         blurRadius: 5,
                         offset: const Offset(0, 3),
@@ -69,12 +77,12 @@ class Home extends StatelessWidget {
                 final posts = postsProvider.posts;
 
                 if (posts.isEmpty) {
-                  return Center(child: Text('No posts available.'));
+                  return const Center(child: Text('No posts available.'));
                 } else {
                   return Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       itemCount: posts.length,
                       itemBuilder: (context, index) {
                         final post = posts[index];
