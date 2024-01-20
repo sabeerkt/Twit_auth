@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/controller/posts_provider.dart';
 import 'package:chats/model/msg.dart';
@@ -5,15 +8,13 @@ import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthPro>(context, listen: false);
+    final currentUser = FirebaseAuth.instance.currentUser;
 
     return SafeArea(
       child: Scaffold(
@@ -43,6 +44,19 @@ class Home extends StatelessWidget {
         ),
         body: Column(
           children: [
+            // Display user information
+            if (currentUser != null)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Logged in as: ${currentUser.email}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
             Expanded(
               child: StreamBuilder<QuerySnapshot<Mesaage>>(
                 stream: DataBaseService().getData(),
@@ -61,7 +75,6 @@ class Home extends StatelessWidget {
                       )
                       .toList();
 
-                  // Filter out posts with null or empty emails
                   final List<Mesaage> validPosts = posts
                       .where((post) =>
                           post.email != null && post.email!.isNotEmpty)
@@ -71,12 +84,14 @@ class Home extends StatelessWidget {
                     itemCount: validPosts.length,
                     itemBuilder: (context, index) {
                       Mesaage post = validPosts[index];
+
                       return Post(
                         msg: post.message ?? '',
                         userEmail: post.email ?? '',
                         index: index,
                         postid: post.id ?? "",
                         Likes: post.Likes ?? [],
+                        timestamp: post.timestamp,
                       );
                     },
                   );
@@ -100,7 +115,6 @@ class Home extends StatelessWidget {
                       final postsProvider =
                           Provider.of<PostProvider>(context, listen: false);
 
-                      // Check if the text field is not empty
                       if (postsProvider.textcontroller.text.trim().isNotEmpty) {
                         postsProvider.addPost(
                           FirebaseAuth.instance.currentUser!.email ?? "",

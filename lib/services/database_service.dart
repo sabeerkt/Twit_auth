@@ -15,7 +15,7 @@ class DataBaseService {
     );
   }
 
-  Stream<QuerySnapshot<Mesaage>> getData() {
+   Stream<QuerySnapshot<Mesaage>> getData() {
     return messageRef.snapshots().handleError((error) {
       print("Error fetching data: $error");
     });
@@ -28,6 +28,7 @@ class DataBaseService {
           email: user,
           message: message,
           Likes: Likes,
+          timestamp: DateTime.now(),
         ),
       );
     } catch (e) {
@@ -77,5 +78,15 @@ class DataBaseService {
         return word;
       }
     }).join(' ');
+  }
+
+   Future<List<String>> getUserNames() async {
+    try {
+      QuerySnapshot<Mesaage> snapshot = await messageRef.get();
+      return snapshot.docs.map((doc) => doc.data()?.email ?? "").toList();
+    } catch (e) {
+      print("Error fetching user names: $e");
+      return [];
+    }
   }
 }

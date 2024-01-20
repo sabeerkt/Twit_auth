@@ -5,6 +5,7 @@ import 'package:chats/widgets/like.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Post extends StatefulWidget {
@@ -13,6 +14,7 @@ class Post extends StatefulWidget {
   final int index;
   final String postid;
   final List<String> Likes;
+  final DateTime? timestamp;
 
   Post({
     Key? key,
@@ -21,6 +23,7 @@ class Post extends StatefulWidget {
     required this.index,
     required this.postid,
     required this.Likes,
+    required this.timestamp,
   }) : super(key: key);
 
   @override
@@ -98,6 +101,15 @@ class _PostState extends State<Post> {
                       color: Color.fromARGB(255, 130, 119, 119),
                     ),
                   ),
+                  Text(
+                    widget.timestamp != null
+                        ? 'Posted on: ${DateFormat.yMMMd().add_jm().format(widget.timestamp!)}'
+                        : '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 130, 119, 119),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -120,28 +132,33 @@ class _PostState extends State<Post> {
                   setState(() {
                     isLiked = !isLiked;
                     if (isLiked) {
-                      widget.Likes.add(FirebaseAuth.instance.currentUser!.email!);
+                      widget.Likes.add(
+                          FirebaseAuth.instance.currentUser!.email!);
                     } else {
-                      widget.Likes.remove(FirebaseAuth.instance.currentUser!.email!);
+                      widget.Likes.remove(
+                          FirebaseAuth.instance.currentUser!.email!);
                     }
                     likeCount = widget.Likes.length;
                   });
 
-                  DocumentReference postref =
-                      FirebaseFirestore.instance.collection('User Post').doc(widget.postid);
+                  DocumentReference postref = FirebaseFirestore.instance
+                      .collection('User Post')
+                      .doc(widget.postid);
                   if (isLiked) {
                     postref.update({
-                      'Likes': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.email])
+                      'Likes': FieldValue.arrayUnion(
+                          [FirebaseAuth.instance.currentUser!.email])
                     });
                   } else {
                     postref.update({
-                      'Likes': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.email])
+                      'Likes': FieldValue.arrayRemove(
+                          [FirebaseAuth.instance.currentUser!.email])
                     });
                   }
 
                   Provider.of<PostProvider>(context, listen: false)
                       .toggleLike(widget.postid, isLiked);
-                }, 
+                },
               ),
               const SizedBox(width: 8),
               Text('$likeCount likes'),
