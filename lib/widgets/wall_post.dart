@@ -1,5 +1,5 @@
 import 'package:chats/controller/posts_provider.dart';
-import 'package:chats/model/msg.dart';
+
 import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/dlt.dart';
 import 'package:chats/widgets/like.dart';

@@ -39,28 +39,29 @@ class AuthServices {
   }
 
   //google sign in
-  signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+ Future<UserCredential> signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    // Once signed in, return the UserCredential
-    UserCredential user =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    User? guser = user.user;
-    final UserAuthentication userdata = UserAuthentication(
-        name: guser?.displayName, email: guser?.email, uid: guser?.uid);
-    firestore.collection(collection).doc(guser?.uid).set(userdata.toJson());
-    return user;
-  }
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+  // Once signed in, return the UserCredential
+  UserCredential user =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+  User? guser = user.user;
+  final UserAuthentication userdata = UserAuthentication(
+      name: guser?.displayName, email: guser?.email, uid: guser?.uid);
+  firestore.collection(collection).doc(guser?.uid).set(userdata.toJson());
+  return user;
+}
+
 
   signInWithGithub(context) async {
     GithubAuthProvider githubAuthProvider = GithubAuthProvider();
