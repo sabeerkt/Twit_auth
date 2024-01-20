@@ -39,55 +39,51 @@ class AuthServices {
   }
 
   //google sign in
- Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-  // Once signed in, return the UserCredential
-  UserCredential user =
-      await FirebaseAuth.instance.signInWithCredential(credential);
-  User? guser = user.user;
-  final UserAuthentication userdata = UserAuthentication(
-      name: guser?.displayName, email: guser?.email, uid: guser?.uid);
-  firestore.collection(collection).doc(guser?.uid).set(userdata.toJson());
-  return user;
-}
-
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    // Once signed in, return the UserCredential
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    User? guser = user.user;
+    final UserAuthentication userdata = UserAuthentication(
+        name: guser?.displayName, email: guser?.email, uid: guser?.uid);
+    firestore.collection(collection).doc(guser?.uid).set(userdata.toJson());
+    return user;
+  }
 
   Future<UserCredential?> signInWithGithub(context) async {
-  if (firebaseAuth.currentUser != null) {
-    // There is an ongoing authentication operation, wait for it to finish
-    // or handle the scenario appropriately.
-    return null;
+    if (firebaseAuth.currentUser != null) {
+      // There is an ongoing authentication operation, wait for it to finish
+      // or handle the scenario appropriately.
+      return null;
+    }
+
+    GithubAuthProvider githubAuthProvider = GithubAuthProvider();
+    try {
+      UserCredential user =
+          await firebaseAuth.signInWithProvider(githubAuthProvider);
+      User gituser = user.user!;
+      final UserAuthentication userdata = UserAuthentication(
+          email: gituser.email, name: gituser.displayName, uid: gituser.uid);
+      firestore.collection(collection).doc(gituser.uid).set(userdata.toJson());
+      return user;
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+      throw Exception(e);
+    }
   }
-
-  GithubAuthProvider githubAuthProvider = GithubAuthProvider();
-  try {
-    UserCredential user =
-        await firebaseAuth.signInWithProvider(githubAuthProvider);
-    User gituser = user.user!;
-    final UserAuthentication userdata = UserAuthentication(
-        email: gituser.email, name: gituser.displayName, uid: gituser.uid);
-    firestore.collection(collection).doc(gituser.uid).set(userdata.toJson());
-    return user;
-  } catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.toString())));
-    throw Exception(e);
-  }
-}
-
-
-
 
   void signInwithPhone(
       String phonenumber, context, String name, String email) async {
@@ -96,7 +92,8 @@ class AuthServices {
           phoneNumber: phonenumber,
           verificationCompleted:
               (PhoneAuthCredential phoneAuthCredential) async {
-            var cred = await firebaseAuth.signInWithCredential(phoneAuthCredential);
+            var cred =
+                await firebaseAuth.signInWithCredential(phoneAuthCredential);
             final UserAuthentication userdata = UserAuthentication(
                 email: email,
                 name: name,

@@ -1,5 +1,4 @@
 import 'package:chats/controller/posts_provider.dart';
-
 import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/dlt.dart';
 import 'package:chats/widgets/like.dart';
@@ -92,7 +91,7 @@ class _PostState extends State<Post> {
                     ),
                   ),
                   Text(
-                    widget.userEmail.toUpperCase(),
+                    widget.userEmail,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

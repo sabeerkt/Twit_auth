@@ -61,10 +61,16 @@ class Home extends StatelessWidget {
                       )
                       .toList();
 
+                  // Filter out posts with null or empty emails
+                  final List<Mesaage> validPosts = posts
+                      .where((post) =>
+                          post.email != null && post.email!.isNotEmpty)
+                      .toList();
+
                   return ListView.builder(
-                    itemCount: posts.length,
+                    itemCount: validPosts.length,
                     itemBuilder: (context, index) {
-                      Mesaage post = posts[index];
+                      Mesaage post = validPosts[index];
                       return Post(
                         msg: post.message ?? '',
                         userEmail: post.email ?? '',
@@ -97,7 +103,7 @@ class Home extends StatelessWidget {
                       // Check if the text field is not empty
                       if (postsProvider.textcontroller.text.trim().isNotEmpty) {
                         postsProvider.addPost(
-                          FirebaseAuth.instance.currentUser!.email!,
+                          FirebaseAuth.instance.currentUser!.email ?? "",
                           postsProvider.textcontroller.text,
                         );
                         postsProvider.textcontroller.clear();
