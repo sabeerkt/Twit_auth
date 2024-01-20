@@ -219,7 +219,10 @@ class LoginPage extends StatelessWidget {
                           child: Container(
                             child: const Text(
                               "Sign Up",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                         ),

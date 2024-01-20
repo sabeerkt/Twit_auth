@@ -46,20 +46,23 @@ class Home extends StatelessWidget {
           children: [
             // Display user information
             if (currentUser != null)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Logged in as: ${currentUser.email}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+              Card(
+                elevation: 8, // Set the elevation value as needed
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    'Logged in as: ${currentUser.email}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
 
             Expanded(
               child: StreamBuilder<QuerySnapshot<Mesaage>>(
-                stream: DataBaseService().getData(),
+                stream: DataBaseService().getDataOrderByTimestamp(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Text("Error: ${snapshot.error}");

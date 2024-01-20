@@ -15,11 +15,14 @@ class DataBaseService {
     );
   }
 
-   Stream<QuerySnapshot<Mesaage>> getData() {
-    return messageRef.snapshots().handleError((error) {
-      print("Error fetching data: $error");
-    });
-  }
+   Stream<QuerySnapshot<Mesaage>> getDataOrderByTimestamp() {
+  return messageRef
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .handleError((error) {
+        print("Error fetching data: $error");
+      });
+}
 
   Future<void> addPost(String user, String message, List<String> Likes) async {
     try {

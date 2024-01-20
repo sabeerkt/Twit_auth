@@ -94,7 +94,9 @@ class _PostState extends State<Post> {
                     ),
                   ),
                   Text(
-                    widget.userEmail,
+                    widget.userEmail
+                        .split('@')
+                        .first, // Extracting the username
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
