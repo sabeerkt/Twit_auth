@@ -49,7 +49,7 @@ class AuthPro extends ChangeNotifier {
   }
 
   //google sign in
-  Future<UserCredential> signInWithGoogle() async { 
+  Future<UserCredential> signInWithGoogle() async {
     return authservices.signInWithGoogle();
   }
 

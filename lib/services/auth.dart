@@ -63,21 +63,29 @@ class AuthServices {
 }
 
 
-  signInWithGithub(context) async {
-    GithubAuthProvider githubAuthProvider = GithubAuthProvider();
-    try {
-      UserCredential user = await firebaseAuth.signInWithProvider(githubAuthProvider);
-      User gituser = user.user!;
-      final UserAuthentication userdata = UserAuthentication(
-          email: gituser.email, name: gituser.displayName, uid: gituser.uid);
-      firestore.collection(collection).doc(gituser.uid).set(userdata.toJson());
-      return user;
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
-      throw Exception(e);
-    }
+  Future<UserCredential?> signInWithGithub(context) async {
+  if (firebaseAuth.currentUser != null) {
+    // There is an ongoing authentication operation, wait for it to finish
+    // or handle the scenario appropriately.
+    return null;
   }
+
+  GithubAuthProvider githubAuthProvider = GithubAuthProvider();
+  try {
+    UserCredential user =
+        await firebaseAuth.signInWithProvider(githubAuthProvider);
+    User gituser = user.user!;
+    final UserAuthentication userdata = UserAuthentication(
+        email: gituser.email, name: gituser.displayName, uid: gituser.uid);
+    firestore.collection(collection).doc(gituser.uid).set(userdata.toJson());
+    return user;
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
+    throw Exception(e);
+  }
+}
+
 
 
 
