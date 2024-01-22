@@ -8,7 +8,7 @@ import 'package:chats/services/database_service.dart';
 import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lottie/lottie.dart';
+
 
 class Home extends StatelessWidget {
   @override

@@ -65,13 +65,9 @@ class DataBaseService {
     }
   }
 
-  Future<List<Mesaage>> getAllPosts() async {
-    QuerySnapshot<Mesaage> snapshot = await messageRef.get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
-  }
-
+  
   String capitalizeFirstLetter(String text) {
-    if (text == null || text.isEmpty) {
+    if (text.isEmpty) {
       return text;
     }
     return text.split(' ').map((word) {

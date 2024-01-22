@@ -17,12 +17,7 @@ class AuthPro extends ChangeNotifier {
 
   User? _user;
 
-  AuthProvider() {
-    authservices.firebaseAuth.authStateChanges().listen((user) {
-      _user = user;
-      notifyListeners();
-    });
-  }
+ 
 
   User? get user => _user;
 
@@ -33,7 +28,6 @@ class AuthPro extends ChangeNotifier {
 
 //sign user out
   Future<void> signOut() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
   }
 

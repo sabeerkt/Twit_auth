@@ -22,8 +22,5 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchPosts() async {
-    posts = await postsservices.getAllPosts();
-    notifyListeners();
-  }
+ 
 }

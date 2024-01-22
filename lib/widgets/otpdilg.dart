@@ -63,11 +63,7 @@ class CustomAlertDialog extends StatelessWidget {
         height: 150,
       ),
       actions: [
-        // CustomTextField(
-        //   controller: otpcontroller,
-        //   hinttext: "OTP",
-        //   fillcolor: const Color.fromRGBO(43, 40, 53, 1),
-        // ),
+       
         Pinput(
           length: 6,
           showCursor: true,

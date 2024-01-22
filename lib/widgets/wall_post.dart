@@ -44,16 +44,14 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser!;
-    final Color postColor = widget.index % 2 == 0
-        ? Color.fromARGB(255, 255, 255, 255)
-        : const Color.fromARGB(255, 255, 255, 255);
+
     String avatarLetter = widget.userEmail.isNotEmpty
         ? widget.userEmail.substring(0, 1).toUpperCase()
         : '';
 
     return Container(
       decoration: BoxDecoration(
-        color: postColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(

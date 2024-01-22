@@ -1,5 +1,5 @@
 import 'package:chats/model/model.dart';
-import 'package:chats/widgets/otpdilg.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class AuthServices {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-// sign user in
+// sign user in 2 parmetrs
   Future<UserCredential> signInWithEmailandPassword(
       String email, String password) async {
     try {
@@ -85,43 +85,8 @@ class AuthServices {
     }
   }
 
-  void signInwithPhone(
-      String phonenumber, context, String name, String email) async {
-    try {
-      await firebaseAuth.verifyPhoneNumber(
-          phoneNumber: phonenumber,
-          verificationCompleted:
-              (PhoneAuthCredential phoneAuthCredential) async {
-            var cred =
-                await firebaseAuth.signInWithCredential(phoneAuthCredential);
-            final UserAuthentication userdata = UserAuthentication(
-                email: email,
-                name: name,
-                uid: cred.user!.uid,
-                phoneNumber: cred.user!.phoneNumber);
-            firestore
-                .collection(collection)
-                .doc(cred.user!.uid)
-                .set(userdata.toJson());
-          },
-          verificationFailed: (error) {
-            throw Exception(error.message);
-          },
-          codeSent: (verificationId, resendtoken) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return CustomAlertDialog(
-                  veridicationId: verificationId,
-                );
-              },
-            );
-          },
-          codeAutoRetrievalTimeout: (verificationId) {});
-    } on FirebaseAuthException catch (e) {
-      throw Exception(e);
-    }
-  }
+ 
+
 
   void verifyOtp(
       {required String verificationId,
