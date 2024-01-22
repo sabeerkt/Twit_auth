@@ -37,7 +37,7 @@ class FirebaseAuthMethods {
               });
         }),
         codeAutoRetrievalTimeout: (String verificationId) {
-          //auto resolution time out....
+          //auto resolution time out..
         });
   }
 

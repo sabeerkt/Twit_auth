@@ -9,7 +9,6 @@ import 'package:chats/widgets/textform.dart';
 import 'package:chats/widgets/wall_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class Home extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Text(
                     'Logged in as: ${currentUser.email}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -126,7 +125,7 @@ class Home extends StatelessWidget {
                         postsProvider.textcontroller.clear();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content:
                                 Text('Please enter a message before posting.'),
                           ),

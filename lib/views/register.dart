@@ -81,7 +81,7 @@ class SignUp extends StatelessWidget {
                           height: 20,
                         ),
                         TextForm(
-                          hinttext: 'Username',
+                          hinttext: 'Gmail',
                           obscureText: true,
                           controller: value.usernameController,
                         ),

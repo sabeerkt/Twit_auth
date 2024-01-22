@@ -47,7 +47,8 @@ class DataBaseService {
           .delete()
           .then((value) => print('Deleted'))
           .catchError((error) => print("Failed to delete post: $error"));
-    } catch (e) {
+    }
+     catch (e) {
       print("Error deleting post: $e");
     }
   }

@@ -78,26 +78,7 @@ class LoginPage extends StatelessWidget {
                           controller: provider.passwordController,
                         ),
                         const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // Handle forgot password
-                                },
-                                child: const Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+
                         const SizedBox(height: 10),
                         Button(
                           name: "sign",
@@ -218,10 +199,10 @@ class LoginPage extends StatelessWidget {
                           },
                           child: Container(
                             child: const Text(
-                              "Sign Up",
+                              "Register Now",
                               style: TextStyle(
                                 color: Colors.blue,
-                                fontSize: 20,
+                                fontSize: 15,
                               ),
                             ),
                           ),

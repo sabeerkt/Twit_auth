@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPro extends ChangeNotifier {
+  //chnge varible name 
   AuthServices authservices = AuthServices();
   String? otpcode;
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  //chnge 
   final Confpasswordcontroller = TextEditingController();
 
   bool showLoginPage = true;
@@ -16,8 +18,6 @@ class AuthPro extends ChangeNotifier {
   //instance of auth
 
   User? _user;
-
- 
 
   User? get user => _user;
 
@@ -28,7 +28,9 @@ class AuthPro extends ChangeNotifier {
 
 //sign user out
   Future<void> signOut() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
+    notifyListeners();
   }
 
   Future<UserCredential> signInWithEmailandPassword(

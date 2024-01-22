@@ -10,7 +10,6 @@ class AuthServices {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-// sign user in 2 parmetrs
   Future<UserCredential> signInWithEmailandPassword(
       String email, String password) async {
     try {
@@ -27,7 +26,7 @@ class AuthServices {
   }
 
 //create a new user
-  Future<UserCredential> signUpWithEmailandPassword(
+  Future<UserCredential> signUpWithEmailandPassword(                        
       String email, password) async {
     try {
       UserCredential userCredential = await firebaseAuth
@@ -84,9 +83,6 @@ class AuthServices {
       throw Exception(e);
     }
   }
-
- 
-
 
   void verifyOtp(
       {required String verificationId,

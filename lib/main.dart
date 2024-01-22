@@ -1,9 +1,9 @@
 import 'package:chats/auth/auth.dart';
-import 'package:chats/auth/login_reg.dart';
+
 import 'package:chats/controller/auth_provider.dart';
 import 'package:chats/controller/posts_provider.dart';
 import 'package:chats/firebase_options.dart';
-import 'package:chats/views/login.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -25,8 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AuthPro(),
         ),
-         ChangeNotifierProvider(create: (context) => PostProvider(),)
-
+        ChangeNotifierProvider(
+          create: (context) => PostProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
